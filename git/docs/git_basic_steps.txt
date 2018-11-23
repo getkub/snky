@@ -1,0 +1,54 @@
+# Basic understanding of  bare and non-bare repositories
+# Bare is the ONLY way to centralised, but you cannot read the contents
+# non-bare exists in your laptop, your home directories etc. and is your working repo
+
+# ======================= #
+#
+#  In centralised server
+#
+# ======================= #
+# Deicide a good directory to put your centralised code
+centralServer = "myCentralServerHostname"
+gitUserName = "git"
+centralDir="/opt/git_repo/"
+bareRepo="splunk_repo.git"   # best practice is to use .git with bare repoName
+
+cd $centralDir
+git init --bare $bareRepo
+
+# ======================= #
+#
+#  In your laptop
+#
+# ======================= #
+repoName="splunk_repo"
+baseDir="/tmp/"
+
+# Below should be same settings as your centralServer
+centralServer = "myCentralServerHostname"
+gitUserName = "git"
+centralDir="/opt/git_repo/"
+bareRepo="splunk_repo.git"
+
+mkdir -p $baseDir/$repoName
+cd $baseDir/$repoName
+git init
+
+# now copy all your code with directory structure
+cp -r somewhere/<your_code> $baseDir/$repoName/
+git status
+git add .
+git commit -a -m "First commit"
+
+# Create an alias/shortcut for your centralServer
+git remote add origin ssh://${gitUserName}@${centralServer}/${centralDir}/${bareRepo}
+# now push it to centralised directory
+git push origin master
+
+# if this is successful, the centralServer will have the contents
+# to test this, clone your centralServer contents to another directory in your laptop
+
+cd /someother/directory
+git clone ssh://${gitUserName}@${centralServer}/${centralDir}/${bareRepo}
+
+# ======================= #
