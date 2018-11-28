@@ -1,0 +1,16 @@
+# Generic Splunk Variables across whole of the Organisation
+
+# Binaries Base location
+base_binary_dir: '/tmp/binaries/'
+
+# Binaries Base location for Splunk
+base_binary: "{{base_binary_dir}}/splunk"
+
+# Splunk Enterprise Settings
+splunk_es_product: 'splunk'
+splunk_es_version: '7.2.1'
+splunk_es_build: 'be11b2c46e23'
+splunk_es_arch: "amd64"           # values can be : x86_64 (redhat, tgz), amd64 (ubuntu), x64 (Windows)
+splunk_es_os: "linux"             # values can be : linux, windows
+splunk_es_pkg: "rpm"              # Values can be : tgz, rpm, deb, msi
+splunk_es_binary: "{{base_binary}}/${{splunk_es_product}}-${{splunk_es_version}}-${{splunk_es_build}}-${{splunk_es_os}}-${{splunk_es_arch}}.${{splunk_es_pkg}}"

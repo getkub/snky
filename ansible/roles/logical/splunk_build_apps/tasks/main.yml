@@ -1,0 +1,10 @@
+---
+
+- import_tasks: set_variables_sta.yml
+  tags: [set_variables]
+
+- import_tasks: pre_build_apps.yml
+  tags: [pre_build_apps]
+
+- import_tasks: build_apps_specific.yml
+  tags: [build_apps_specific]
