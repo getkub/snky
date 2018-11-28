@@ -1,0 +1,19 @@
+---
+# Playbook to copy apps to different Splunk tiers based on a whitelist/blacklist pattern
+
+
+- name: Find directory/hosts which are built
+  find:
+    paths: "{{dest_base}}/{{project}}/{{buildDir}}/{{inputTag}}-specific"
+    file_type: directory
+  register: built_hosts
+  delegate_to: localhost
+
+- name: Copy Apps from already built_apps
+  synchronize:
+    src: "{{dest_base}}/{{project}}/{{buildDir}}/{{inputTag}}-specific/{{item | basename }}"
+    dest: /tmp/jinja/
+    delete: yes
+  delegate_to: localhost
+  with_items:
+    - "{{built_hosts.files[0].path }}"

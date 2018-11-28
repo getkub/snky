@@ -1,6 +1,5 @@
 ---
-
-- import_tasks: set_variables_sta.yml
+- import_tasks: roles/common/set_variables/set_variables_{{inputTag}}.yml
   tags: [set_variables]
 
 - import_tasks: pre_build_apps.yml

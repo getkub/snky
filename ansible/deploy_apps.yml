@@ -3,7 +3,7 @@
 
 - name: Provision Splunk System
   hosts: dev
-  gather_facts: yes
+  gather_facts: no
   vars_files:
     - inventories/common/group_vars/all.yml
     - inventories/common/group_vars/app_vars.yml
@@ -11,4 +11,5 @@
 
   roles:
     - common/mkouhei.include_csv
+    - common/set_variables
     - logical/splunk_copy_apps

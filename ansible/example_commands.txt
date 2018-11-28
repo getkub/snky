@@ -1,6 +1,6 @@
-ansible-playbook -i hosts -c local site.yml --ask-become-pass
+cd ansible
+ansible-playbook -i hosts -c local build_apps.yml
 
-# For specific roles use tags
-ansible-playbook -i hosts -c local site.yml --tags "set_variables,build_apps"
-ansible-playbook -i hosts -c local site.yml --tags "copy_apps"
-ansible-playbook -i hosts -c local site.yml --tags "set_variables,build_apps" --ask-become-pass
+# Ensure you update the hostname address in ansible/hosts file with IP and ssh-user
+# this hostname should exactly match the hostname provided in the ansible/configs/xxx_serverList.csv
+ansible-playbook -i hosts deploy_apps.yml --ask-pass

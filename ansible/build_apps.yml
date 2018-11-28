@@ -11,4 +11,5 @@
 
   roles:
     - common/mkouhei.include_csv
+    - common/set_variables
     - logical/splunk_build_apps

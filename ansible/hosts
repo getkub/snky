@@ -1,2 +1,2 @@
 [dev]
-192.168.56.3 ansible_ssh_user=root
+splunk_standalone ansible_ssh_user=root
