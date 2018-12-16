@@ -24,3 +24,7 @@ splunk_user: "splunk"
 # Env specific app where you can put anything wild
 envApp: "MY_all_env_specific"
 licenseFile: "/tmp/splunkes.lic.xml"
+
+splunk_enterprise_default_apps_file: "{{src_base}}/configs/splunk_enterprise_default_files.list"
+
+#["alert_logevent" , "appsbrowser" , "gettingstarted" , "launcher" , "legacy" , "sample_app" , "splunk_archiver" , "splunk_gdi" , "splunk_instrumentation" , "splunk_monitoring_console" , "alert_webhook" , "framework" , "introspection_generator_addon" , "learned" , "search" , "SplunkForwarder" , "splunk_httpinput" , "SplunkLightForwarder" , "user-prefs"]
