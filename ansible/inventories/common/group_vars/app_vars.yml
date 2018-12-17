@@ -27,3 +27,6 @@ licenseFile: "/tmp/splunkes.lic.xml"
 
 splunk_enterprise_default_apps_file: "{{src_base}}/configs/splunk_enterprise_default_files.list"
 splunk_uf_default_apps_file: "{{src_base}}/configs/splunk_uf_default_files.list"
+
+SPLUNK_HOME_sta: "/opt/splunk"
+SPLUNK_HOME_uf: "/opt/splunkforwarder"

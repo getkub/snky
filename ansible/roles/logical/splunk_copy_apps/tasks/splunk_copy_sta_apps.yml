@@ -33,7 +33,7 @@
   become_user: splunk
   synchronize:
     src: "{{dest_base}}/{{project}}/{{buildDir}}/sta-specific/{{item}}/etc/apps/"
-    dest: "/opt/splunk/etc/apps/"
+    dest: "{{SPLUNK_HOME_sta}}/etc/apps/"
     delete: yes
     rsync_opts:
         - "--exclude-from={{splunk_enterprise_default_apps_file}}"
@@ -44,4 +44,8 @@
 
 # Inbuilt file module not working nor synchronize. need to investigate on this further
 - name: Workaround - Change owner to splunk
-  command: chown -R splunk:splunk /opt/splunk/etc/apps
+  command: chown -R splunk:splunk {{SPLUNK_HOME_sta}}/etc/apps
+  when:
+      - item == inventory_hostname
+  with_items:
+    - "{{built_hosts_meta.files[0].path | basename}}"

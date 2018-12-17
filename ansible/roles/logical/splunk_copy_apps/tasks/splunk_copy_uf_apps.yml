@@ -28,15 +28,15 @@
 #     - "{{built_hosts.results[0].item}}"
 
 # --exclude-from should ensure particular Splunk version apps are excluded from deletion
-- name: Copy Apps from already built_apps to remote Splunk Enterprise etc/apps
+- name: Copy Apps from already built_apps to remote Splunk UF etc/apps
   become: true
   become_user: splunk
   synchronize:
     src: "{{dest_base}}/{{project}}/{{buildDir}}/uf-specific/{{item}}/etc/apps/"
-    dest: "/opt/splunk/etc/apps/"
+    dest: "{{SPLUNK_HOME_uf}}/etc/apps/"
     delete: yes
     rsync_opts:
-        - "--exclude-from={{splunk_enterprise_default_apps_file}}"
+        - "--exclude-from={{splunk_uf_default_apps_file}}"
   when:
       - item == inventory_hostname
   with_items:
@@ -44,4 +44,8 @@
 
 # Inbuilt file module not working nor synchronize. need to investigate on this further
 - name: Workaround - Change owner to splunk
-  command: chown -R splunk:splunk /opt/splunk/etc/apps
+  command: chown -R splunk:splunk {{SPLUNK_HOME_uf}}/etc/apps/
+  when:
+      - item == inventory_hostname
+  with_items:
+    - "{{built_hosts_meta.files[0].path | basename}}"
