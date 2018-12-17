@@ -1,5 +1,8 @@
 ---
 # Playbook to copy apps using templates
 
-- import_tasks: splunk_copy_apps.yml
-  tags: [splunk_copy_apps]
+- import_tasks: splunk_copy_sta_apps.yml
+  tags: [splunk_copy_sta_apps]
+
+- import_tasks: splunk_copy_uf_apps.yml
+  tags: [splunk_copy_uf_apps]

@@ -11,7 +11,7 @@ bareApps: "bareApps"
 # sta => standalone
 # es => cluster
 # inputTag should be either es or sta
-inputTag: "sta"
+# inputTag: "sta"
 env: "dev"
 
 # vars_prompt:
@@ -22,5 +22,8 @@ env: "dev"
 # Counters to be reused
 # counter: 0
 
-serverList: "{{src_base}}/configs/{{inputTag}}_serverList.csv"
-appMapping: "{{src_base}}/configs/{{inputTag}}_appMapping.csv"
+sta_serverList: "{{src_base}}/configs/sta_serverList.csv"
+sta_appMapping: "{{src_base}}/configs/sta_appMapping.csv"
+
+uf_serverList: "{{src_base}}/configs/uf_serverList.csv"
+uf_appMapping: "{{src_base}}/configs/uf_appMapping.csv"

@@ -4,18 +4,18 @@
 
 - name: Find directory/hosts which are built
   find:
-    paths: "{{dest_base}}/{{project}}/{{buildDir}}/{{inputTag}}-specific"
+    paths: "{{dest_base}}/{{project}}/{{buildDir}}/sta-specific"
     file_type: directory
   register: built_hosts_meta
   delegate_to: localhost
 
-- name: Get list of pre-built hostnames
-  debug:
-    msg: "Trying to deploy to host {{item}}"
-  register: built_hosts
-  delegate_to: localhost
-  with_items:
-    - "{{built_hosts_meta.files[0].path | basename}}"
+# - name: Get list of pre-built hostnames
+#   debug:
+#     msg: "Trying to deploy to host {{item}}"
+#   register: built_hosts
+#   delegate_to: localhost
+#   with_items:
+#     - "{{built_hosts_meta.files[0].path | basename}}"
 
 # - name: Get list of pre-built hostnames
 #   debug:
@@ -32,8 +32,8 @@
   become: true
   become_user: splunk
   synchronize:
-    src: "{{dest_base}}/{{project}}/{{buildDir}}/{{inputTag}}-specific/{{item}}/etc/apps/"
-    dest: "/tmp/jinja/"
+    src: "{{dest_base}}/{{project}}/{{buildDir}}/sta-specific/{{item}}/etc/apps/"
+    dest: "/opt/splunk/etc/apps/"
     delete: yes
     rsync_opts:
         - "--exclude-from={{splunk_enterprise_default_apps_file}}"
@@ -41,3 +41,7 @@
       - item == inventory_hostname
   with_items:
     - "{{built_hosts_meta.files[0].path | basename}}"
+
+# Inbuilt file module not working nor synchronize. need to investigate on this further
+- name: Workaround - Change owner to splunk
+  command: chown -R splunk:splunk /opt/splunk/etc/apps

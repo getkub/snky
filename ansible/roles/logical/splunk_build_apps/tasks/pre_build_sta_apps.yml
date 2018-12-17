@@ -3,41 +3,48 @@
 
 - name: Cleans & Creates Temporary directory
   file:
-    path: "{{dest_base}}/{{project}}/{{bareApps}}"
+    path: "{{dest_base}}/{{project}}/{{bareApps}}/sta-specific"
     state: "{{item}}"
   with_items:
-    - absent
     - directory
 
 # Copy files from template to bareApps in Temporary location
 - name: Build necessary non-template files & directories
   synchronize:
     src:  "../files/{{env}}/"
-    dest: "{{dest_base}}/{{project}}/{{bareApps}}/"
+    dest: "{{dest_base}}/{{project}}/{{bareApps}}/sta-specific/"
     delete: yes
+  ignore_errors: yes
 
 # Create host-specific directories too
 - name: Creates Host-Specific directory
   file:
     state: directory
-    path:  "{{dest_base}}/{{project}}/{{bareApps}}/{{inputTag}}-specific/{{item.hostname}}/etc/system/local"
+    path:  "{{dest_base}}/{{project}}/{{bareApps}}/sta-specific/{{item.hostname}}/etc/system/local"
   with_items:
-     - "{{my_serverList}}"
+     - "{{my_sta_serverList}}"
+
+- name: Creates Host-Specific directory
+  file:
+    state: directory
+    path:  "{{dest_base}}/{{project}}/{{bareApps}}/sta-specific/{{item.hostname}}/etc/system/local"
+  with_items:
+     - "{{my_sta_serverList}}"
 
 # Create hostnames based directories with configurations
 # Directly update $SPLUNK_HOME/etc/system/local/ for certain configurations
 - name:  Create host-specific conf files
   template:
         src={{item[1]}}
-        dest={{dest_base}}/{{project}}/{{bareApps}}/{{inputTag}}-specific/{{item[0].hostname}}/etc/system/local/{{ item[1] | basename | regex_replace('\.j2','') }}
+        dest={{dest_base}}/{{project}}/{{bareApps}}/sta-specific/{{item[0].hostname}}/etc/system/local/{{ item[1] | basename | regex_replace('\.j2','') }}
   with_nested:
-     - "{{my_serverList}}"
+     - "{{my_sta_serverList}}"
      - "{{ lookup('fileglob', '../templates/system_local/*.j2') }}"
 
 # Create Splunk apps directory from template
 - name: Ensure App dir Exists
   file:
-    path: "{{dest_base}}/{{project}}/{{bareApps}}/{{item | basename | regex_replace('^(?P<appName>.+)__.*$', '\\g<appName>')}}/local"
+    path: "{{dest_base}}/{{project}}/{{bareApps}}/sta-specific/{{item | basename | regex_replace('^(?P<appName>.+)__.*$', '\\g<appName>')}}/local"
     state: directory
   with_fileglob:
     - "../templates/common/*.j2"
@@ -47,7 +54,7 @@
 - name: Build apps from ready-made templates
   template:
     src={{item}}
-    dest={{dest_base}}/{{project}}/{{bareApps}}/{{item | basename | regex_replace('^(?P<appName>.+)__.*$', '\\g<appName>')}}/local/{{item | basename | regex_replace('.*__(?P<confName>.+)\.j2', '\\g<confName>')}}
+    dest={{dest_base}}/{{project}}/{{bareApps}}/sta-specific/{{item | basename | regex_replace('^(?P<appName>.+)__.*$', '\\g<appName>')}}/local/{{item | basename | regex_replace('.*__(?P<confName>.+)\.j2', '\\g<confName>')}}
   with_fileglob:
     - "../templates/common/*.j2"
     - "../templates/standalone/*.j2"

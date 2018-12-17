@@ -1,23 +1,23 @@
 ---
 # data is stored in a variable whose name is the CSV file name without the extension
 - include_csv:
-    src: "{{serverList}}"
-    outname: "my_serverList"
+    src: "{{sta_serverList}}"
+    outname: "my_sta_serverList"
 
 - include_csv:
-    src: "{{appMapping}}"
-    outname: "my_appMapping"
+    src: "{{sta_appMapping}}"
+    outname: "my_sta_appMapping"
 
 # sta_serverList is the name of the csv.
 # For compatibility of old versions, match is changed to match
 
 - name: "Set Serverlist CSV variables"
   set_fact:
-    cluster_master_grp: "{{ my_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
-    dep_server_grp:     "{{ my_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
-    ind_slave_grp:      "{{ my_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
-    license_master_grp: "{{ my_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
-    shc_member_grp:     "{{ my_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
+    cluster_master_grp: "{{ my_sta_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
+    dep_server_grp:     "{{ my_sta_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
+    ind_slave_grp:      "{{ my_sta_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
+    license_master_grp: "{{ my_sta_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
+    shc_member_grp:     "{{ my_sta_serverList | selectattr('hostGroup','match','^standalone$') | map(attribute='hostname') | list }}"
 
 - name: "Set Serverlist Concatenated variables"
   set_fact:

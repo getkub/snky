@@ -2,3 +2,6 @@
 # Playbook to copy apps using templates
 - import_tasks: set_variables_sta.yml
   tags: [set_variables_sta]
+
+- import_tasks: set_variables_uf.yml
+  tags: [set_variables_uf]

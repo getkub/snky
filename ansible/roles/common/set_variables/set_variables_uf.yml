@@ -1,0 +1,9 @@
+---
+# data is stored in a variable whose name is the CSV file name without the extension
+- include_csv:
+    src: "{{uf_serverList}}"
+    outname: "my_uf_serverList"
+
+- include_csv:
+    src: "{{uf_appMapping}}"
+    outname: "my_uf_appMapping"

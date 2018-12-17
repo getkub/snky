@@ -1,0 +1,47 @@
+---
+# Playbook to copy apps to different Splunk tiers based on a whitelist/blacklist pattern
+
+
+- name: Find directory/hosts which are built
+  find:
+    paths: "{{dest_base}}/{{project}}/{{buildDir}}/uf-specific"
+    file_type: directory
+  register: built_hosts_meta
+  delegate_to: localhost
+
+# - name: Get list of pre-built hostnames
+#   debug:
+#     msg: "Trying to deploy to host {{item}}"
+#   register: built_hosts
+#   delegate_to: localhost
+#   with_items:
+#     - "{{built_hosts_meta.files[0].path | basename}}"
+
+# - name: Get list of pre-built hostnames
+#   debug:
+#     msg: "inventory_hostname={{inventory_hostname}}"
+
+# - name: Get list of built_hosts
+#   debug:
+#     msg: "built_hosts===={{item}}"
+#   with_items:
+#     - "{{built_hosts.results[0].item}}"
+
+# --exclude-from should ensure particular Splunk version apps are excluded from deletion
+- name: Copy Apps from already built_apps to remote Splunk Enterprise etc/apps
+  become: true
+  become_user: splunk
+  synchronize:
+    src: "{{dest_base}}/{{project}}/{{buildDir}}/uf-specific/{{item}}/etc/apps/"
+    dest: "/opt/splunk/etc/apps/"
+    delete: yes
+    rsync_opts:
+        - "--exclude-from={{splunk_enterprise_default_apps_file}}"
+  when:
+      - item == inventory_hostname
+  with_items:
+    - "{{built_hosts_meta.files[0].path | basename}}"
+
+# Inbuilt file module not working nor synchronize. need to investigate on this further
+- name: Workaround - Change owner to splunk
+  command: chown -R splunk:splunk /opt/splunk/etc/apps
